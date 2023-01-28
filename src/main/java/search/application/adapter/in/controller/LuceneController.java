@@ -25,9 +25,9 @@ import search.common.Constants;
 public class LuceneController {
 
 	@Operation(summary = "Test API", description = "<b style='color: red;'>TEST</b> API.")
-	@Parameters(value = {
-	    @Parameter(name="id", description="id(식별코드)", required=true, in=ParameterIn.QUERY, example = "1234")
-	})
+//	@Parameters(value = {
+//	    @Parameter(name="id", description="id(식별코드)", required=true, in=ParameterIn.QUERY, example = "1234")
+//	})
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200"
 					, description = Constants.MESSAGE_200_PREFIX + "ResponseMessage" + Constants.MESSAGE_200_POSTFIX
@@ -36,7 +36,7 @@ public class LuceneController {
 			@ApiResponse(responseCode = "500", description = "An error occurred")
 	})
 	@GetMapping("/test")
-	public ResponseMessage test(String id) {
+	public ResponseMessage test(@Parameter(name="id", description="id(식별코드)", required=true, in=ParameterIn.QUERY, example = "1234")String id) {
 		ResponseMessage responseMessage = new ResponseMessage();
 		try {
 			log.debug("========== LuceneController :: test");

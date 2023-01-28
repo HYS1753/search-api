@@ -24,18 +24,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	
 	// Swagger
-	//implementation "io.springfox:springfox-boot-starter:3.0.0"
-	//implementation "io.springfox:springfox-swagger-ui:3.0.0"
-	//implementation "io.springfox:springfox-oas:3.0.0"
-	//implementation "io.springfox:springfox-swagger2:2.9.2"
-	//implementation "io.springfox:springfox-swagger-ui:2.9.2"
-	//implementation 'io.swagger:swagger-annotations:1.5.21'
-    //implementation 'io.swagger:swagger-models:1.5.21'
-	//implementation "com.google.guava:guava:23"
-	//implementation "org.springdoc:springdoc-openapi:1.6.14"
-	//implementation "org.springdoc:springdoc-openapi-ui:1.6.11"
 	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2"
-	//implementation "org.springdoc:springdoc-openapi-webflux-ui:1.6.14"
 	
 	// DB
 	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
@@ -51,7 +40,6 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpclient:4.5.13'
 	
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	//testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('test') {
