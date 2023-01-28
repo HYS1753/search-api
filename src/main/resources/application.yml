@@ -1,0 +1,37 @@
+spring:
+  profiles:
+    active: ${PROFILE}
+  application:
+    name: search
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 200MB
+      max-request-size: 215MB
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
+      
+gpring:
+  application:
+    name: search
+
+logging:
+  logpath: ${LOGPATH}
+  config: "classpath:properties/${PROFILE}/logback.xml"
+  
+springdoc:
+  version: v1.0.0
+  packages-to-scan: search.application.adapter
+  swagger-ui:
+    path: /swagger-ui/index.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /api-docs/json
+    groups:
+      enabled: true
+  cache:
+    disabled: true
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
