@@ -1,10 +1,8 @@
 package search.application.adapter.out.lucene;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.nio.file.Files;
+import java.io.File;
+import java.io.FileReader;
 import java.nio.file.Paths;
-import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,11 +19,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 import lombok.extern.slf4j.Slf4j;
 import search.application.biz.lucene.port.out.LuceneOutPort;
+import search.application.domain.common.CommonRes;
 import search.application.domain.lucene.KoreanRestaurantVo;
 
 /**
@@ -46,11 +44,18 @@ public class LuceneAdapter implements LuceneOutPort {
 	private String koreanRestaurantCsvFilePath;
 
 	@Override
-	public Boolean koreanRestaurentIndexing() throws Exception {
+	public CommonRes koreanRestaurentIndexing() throws Exception {
 		log.debug("========== LuceneAdapter :: koreanRestaurentIndexing :: Start");
+		CommonRes result = new CommonRes();
 		log.debug("========== LuceneAdapter :: koreanRestaurentIndexing :: indexing properies setting start");
 		// 색인 할 디렉터리 오픈
 		Directory indexDirectory = FSDirectory.open(Paths.get(koreanRestaurantIndexPath));
+		// 기존 색인 결과 있으면 삭제 
+		File prevIndexDirectory = new File(koreanRestaurantIndexPath);
+		File[] prevIndexfiles = prevIndexDirectory.listFiles();
+		for (File file : prevIndexfiles) {
+			file.delete();
+		}
 		// 한국어 분석을 위한 koreanAnalyzer 선언
 		KoreanAnalyzer analyzer = new KoreanAnalyzer();
 		// 색인 생성을 위한 Wirter설정 정보 구성, 분석기는 한국어 분석기 사용.
@@ -59,36 +64,44 @@ public class LuceneAdapter implements LuceneOutPort {
 		IndexWriter writer = new IndexWriter(indexDirectory, config);
 		log.debug("========== LuceneAdapter :: koreanRestaurentIndexing :: indexing properies setting success");
 		
+		// read csv file 
 		log.debug("========== LuceneAdapter :: koreanRestaurentIndexing :: read korean Restaurant data from csv file start");
-		//csv file 읽어 드림
 		List<KoreanRestaurantVo> docs = new ArrayList<KoreanRestaurantVo>();
 		ClassPathResource csvFilePath = new ClassPathResource(koreanRestaurantCsvFilePath);
-		try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath.getURI()))){
-			// csv 라이브러리 사용
-			CsvToBean csvToBean = new CsvToBeanBuilder(reader)
-					.withType(KoreanRestaurantVo.class)
-					.withIgnoreLeadingWhiteSpace(true)
-					.build();
-			docs = csvToBean.parse();
+		try {
+			File csvFile = new File(csvFilePath.getURI());
+			docs= new CsvToBeanBuilder<KoreanRestaurantVo>(new FileReader(csvFile))
+		            .withType(KoreanRestaurantVo.class)
+		            .build()
+		            .parse();
 		} catch (Exception e) {
-			log.debug("========== LuceneAdapter :: koreanRestaurentIndexing :: read korean Restaurant data from csv file fail");
+			String resultMsg = "read korean Restaurant data from csv file fail. Please Check logs.";
+			log.debug("========== LuceneAdapter :: koreanRestaurentIndexing :: " + resultMsg);
 			log.debug("========== LuceneAdapter :: koreanRestaurentIndexing :: Fail");
-			return false;
+			result.setResult(false);
+			result.setMessage(resultMsg);
+			return result;
 			//e.printStackTrace();
 		}
 		log.debug("========== LuceneAdapter :: koreanRestaurentIndexing :: parsed from csv " + docs.size() + " data");
 		log.debug("========== LuceneAdapter :: koreanRestaurentIndexing :: read korean Restaurant data from csv file success");
 		
-		log.debug("========== LuceneAdapter :: koreanRestaurentIndexing :: indexing korean restaurant data start");
 		// indexing start
+		log.debug("========== LuceneAdapter :: koreanRestaurentIndexing :: indexing korean restaurant data start");
+		long startIndexingTime = System.currentTimeMillis();
 		docs.stream().forEach(i -> this.koreanRestaurentAddDoc(i, writer));
-		log.debug("========== LuceneAdapter :: koreanRestaurentIndexing :: indexing korean restaurant data success");
+		long endIndexingTime = System.currentTimeMillis();
+		long elapseTime = (long) ((endIndexingTime - startIndexingTime)/1000.0);
+		String ResultMsg = "indexing korean restaurant data end. parsed " + docs.size() + " documents, elapse " + elapseTime + " sec";
+		log.debug("========== LuceneAdapter :: koreanRestaurentIndexing :: " + ResultMsg);
 		
 		// 색인 작업 완료 후 writer 닫음.
 		writer.close();
 		
 		log.debug("========== LuceneAdapter :: koreanRestaurentIndexing :: Success");
-		return true;
+		result.setResult(true);
+		result.setMessage(ResultMsg);
+		return result;
 	}
 	
 	private void koreanRestaurentAddDoc(KoreanRestaurantVo doc, IndexWriter writer) {
@@ -110,7 +123,9 @@ public class LuceneAdapter implements LuceneOutPort {
 			// 색인에 추가 
 			writer.addDocument(document);
 		} catch (Exception e) {
-			//e.printStackTrace();
+			//log.debug(doc.getRestaurantName() + doc.getCategory1() + doc.getCategory2() + doc.getCategory3() + doc.getRegion() + doc.getCity() + doc.getDescription());
+			//log.debug(e.toString());
+			e.printStackTrace();
 		}
 	}
 }

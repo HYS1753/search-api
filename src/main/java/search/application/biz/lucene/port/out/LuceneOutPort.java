@@ -1,5 +1,6 @@
 package search.application.biz.lucene.port.out;
 
+import search.application.domain.common.CommonRes;
 
 /**
 * @Project : search-api
@@ -19,6 +20,6 @@ public interface LuceneOutPort {
 	* @return
 	* @throws Exception 
 	*/
-	public Boolean koreanRestaurentIndexing() throws Exception;
+	public CommonRes koreanRestaurentIndexing() throws Exception;
 
 }

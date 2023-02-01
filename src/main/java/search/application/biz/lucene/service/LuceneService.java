@@ -34,13 +34,7 @@ public class LuceneService implements LucenePort {
 	
 	@Override
 	public CommonRes koreanRestaurentIndexing() throws Exception {
-		CommonRes res = new CommonRes();
-		if (this.luceneEngineService.koreanRestaurentIndexing()) {
-			res.setResult("Success");
-		} else {
-			res.setResult("Fail");
-		}
-		return res;
+		return this.luceneEngineService.koreanRestaurentIndexing();
 	}
 	
 	@Override

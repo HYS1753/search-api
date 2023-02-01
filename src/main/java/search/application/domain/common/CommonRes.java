@@ -14,6 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class CommonRes {
 
-	@Schema(description = "반환 값", required = true, example = "result")
-	private String result;
+	@Schema(description = "성공유무", example = "True")
+	private Boolean result;
+	
+	@Schema(description = "실행결과", example = "True")
+	private String message;
 }
