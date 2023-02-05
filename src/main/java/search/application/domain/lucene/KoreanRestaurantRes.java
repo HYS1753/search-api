@@ -1,5 +1,7 @@
 package search.application.domain.lucene;
 
+import java.util.ArrayList;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,25 +21,10 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class KoreanRestaurantRes {
 
-	@Schema(description = "음식점 명", example = "새마을식당")
-	private String restaurantName; 
-
-	@Schema(description = "카테고리1", example = "음식")
-	private String category1; 
-
-	@Schema(description = "검색 키워드", example = "음식점")
-	private String category2; 
-
-	@Schema(description = "검색 키워드", example = "한식")
-	private String category3; 
-
-	@Schema(description = "지역명", example = "서울")
-	private String region; 
+	@Schema(description = "검색 된 결과 개수", example = "10")
+	private Long matchCount;
 	
-	@Schema(description = "시군구명", example = "종로구")
-	private String city; 
-	
-	@Schema(description = "개요", example = "새마을식당은 돼지고기를 즉석에서 썰어내어 특제고추장 ...")
-	private String description; 
+	@Schema(description = "검색결과", example = "KoreanRestaurantVO")
+	private ArrayList<KoreanRestaurantVo> searchResult;
 
 }

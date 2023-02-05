@@ -1,6 +1,8 @@
 package search.application.biz.lucene.port.out;
 
 import search.application.domain.common.CommonRes;
+import search.application.domain.lucene.KoreanRestaurantReq;
+import search.application.domain.lucene.KoreanRestaurantRes;
 
 /**
 * @Project : search-api
@@ -21,5 +23,15 @@ public interface LuceneOutPort {
 	* @throws Exception 
 	*/
 	public CommonRes koreanRestaurentIndexing() throws Exception;
+	
+	/**
+	* @Date : 2023. 2. 05.
+	* @author : HYS
+	* @description : 한국 음식점 정보 검색 실행 API Out Bound Port
+	* @param 
+	* @return
+	* @throws Exception 
+	*/
+	public KoreanRestaurantRes koreanRestaurentSearching(KoreanRestaurantReq koreanRestaurantReq) throws Exception;
 
 }

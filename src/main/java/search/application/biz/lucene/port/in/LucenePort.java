@@ -12,15 +12,6 @@ import search.application.domain.lucene.KoreanRestaurantRes;
  * @description : Lucene 검색 API In Bound Port
  */
 public interface LucenePort {
-	
-	/**
-	* @Date : 2023. 1. 31.
-	* @author : HYS
-	* @description : 한국 음식점 정보 색인 여부 확인 API Inbound Port
-	* @param : None
-	* @return
-	*/
-	public CommonRes koreanRestaurentIndexCheck();
 
 	/**
 	* @Date : 2023. 1. 31.
@@ -39,5 +30,5 @@ public interface LucenePort {
 	* @param : KoreanRestaurantReq
 	* @return
 	*/
-	public KoreanRestaurantRes koreanRestaurentSearch(KoreanRestaurantReq koreanRestaurantReq);
+	public KoreanRestaurantRes koreanRestaurentSearching(KoreanRestaurantReq koreanRestaurantReq);
 }

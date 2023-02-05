@@ -26,24 +26,18 @@ public class LuceneService implements LucenePort {
 	private LuceneOutPort luceneEngineService;
 	
 	@Override
-	public CommonRes koreanRestaurentIndexCheck() {
-		// 색인 파일 유무 확인
-		CommonRes res = new CommonRes();
-		return res;
-	}
-	
-	@Override
 	public CommonRes koreanRestaurentIndexing() throws Exception {
 		return this.luceneEngineService.koreanRestaurentIndexing();
 	}
 	
 	@Override
-	public KoreanRestaurantRes koreanRestaurentSearch(KoreanRestaurantReq koreanRestaurantReq) {
-		
-		// CSV 파일을 통한 수집 색인 
-		
-		// return
+	public KoreanRestaurantRes koreanRestaurentSearching(KoreanRestaurantReq koreanRestaurantReq) {
 		KoreanRestaurantRes res = new KoreanRestaurantRes();
+		try {
+			res = luceneEngineService.koreanRestaurentSearching(koreanRestaurantReq);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return res;
 	}
 
